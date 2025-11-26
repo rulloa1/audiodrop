@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  audiodrop:
+    build: .
+    image: audiodrop:latest
+    container_name: audiodrop
+    restart: unless-stopped
+    
+    # Audio device access
+    devices:
+      - /dev/snd:/dev/snd
+    
+    # Required for audio access
+    privileged: true
+    
+    # Environment configuration
+    environment:
+      - AUDIO_CHANNELS=1
+      - AUDIO_RATE=44100
+      - RECORD_DURATION=60
+      - OUTPUT_DIR=/recordings
+    
+    # Mount recordings directory
+    volumes:
+      - ./recordings:/recordings
+    
+    # For PulseAudio support (optional)
+    # volumes:
+    #   - /run/user/1000/pulse:/run/user/1000/pulse
+    # environment:
+    #   - PULSE_SERVER=unix:/run/user/1000/pulse/native
