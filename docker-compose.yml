@@ -1,0 +1,14 @@
+services:
+  audiodrop:
+    build: .
+    container_name: audiodrop
+    ports:
+      - "5555:5555"
+    devices:
+      - /dev/snd:/dev/snd
+    group_add:
+      - audio
+    environment:
+      - AUDIO_DEVICE=default
+    restart: unless-stopped
+    command: python3 audio_server.py --host 0.0.0.0 --port 5555
