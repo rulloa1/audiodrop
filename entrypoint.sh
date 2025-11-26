@@ -47,7 +47,7 @@ while true; do
     
     # Use arecord to capture audio
     # -D default: use default audio device
-    # -f cd: CD quality (16-bit, little-endian, stereo if channels=2)
+    # -f S16_LE: 16-bit signed little-endian format
     # -c: number of channels
     # -r: sample rate
     # -d: duration in seconds

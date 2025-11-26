@@ -35,7 +35,7 @@ docker build -t audiodrop .
 docker run -d \
   --name audiodrop \
   --device /dev/snd:/dev/snd \
-  --privileged \
+  --group-add audio \
   -v $(pwd)/recordings:/recordings \
   audiodrop
 ```
@@ -57,7 +57,7 @@ The following environment variables can be used to configure the recorder:
 docker run -d \
   --name audiodrop \
   --device /dev/snd:/dev/snd \
-  --privileged \
+  --group-add audio \
   -e AUDIO_CHANNELS=2 \
   -e AUDIO_RATE=48000 \
   -e RECORD_DURATION=120 \
@@ -84,5 +84,5 @@ recording_20241126_120630.wav
 ## Notes
 
 - The container requires access to audio devices (`--device /dev/snd:/dev/snd`)
+- Add the container to the audio group with `--group-add audio` for device access
 - For PulseAudio systems, you may need to mount the PulseAudio socket
-- The `--privileged` flag may be required for audio device access

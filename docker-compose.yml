@@ -11,8 +11,9 @@ services:
     devices:
       - /dev/snd:/dev/snd
     
-    # Required for audio access
-    privileged: true
+    # Group access for audio (alternative to privileged mode)
+    group_add:
+      - audio
     
     # Environment configuration
     environment:
