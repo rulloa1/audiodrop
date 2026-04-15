@@ -3,32 +3,36 @@ FROM debian:bookworm-slim
 LABEL maintainer="audiodrop"
 LABEL description="Audio recording container with automatic audio capture"
 
-# Install system dependencies for audio recording
+# Install system dependencies and create non-root user in a single layer
 RUN apt-get update && apt-get install -y --no-install-recommends \
     alsa-utils \
     pulseaudio-utils \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && groupadd --gid 1000 audiodrop \
+    && useradd --uid 1000 --gid audiodrop --shell /bin/bash --create-home audiodrop \
+    && mkdir -p /recordings && chown audiodrop:audiodrop /recordings
 
-# Create app directory
 WORKDIR /app
 
-# Copy application files
 COPY entrypoint.sh .
-
-# Make entrypoint executable
 RUN chmod +x entrypoint.sh
 
-# Create recordings directory
-RUN mkdir -p /recordings
-
 # Environment variables with defaults
-ENV AUDIO_CHANNELS=1
-ENV AUDIO_RATE=44100
-ENV RECORD_DURATION=60
-ENV OUTPUT_DIR=/recordings
+ENV AUDIO_CHANNELS=1 \
+    AUDIO_RATE=44100 \
+    RECORD_DURATION=60 \
+    OUTPUT_DIR=/recordings \
+    AUDIO_DEVICE=default \
+    AUDIO_FORMAT=S16_LE \
+    MIN_DISK_MB=100
 
 # Volume for recordings
 VOLUME ["/recordings"]
 
-# Entrypoint
+# Healthcheck: verify arecord binary is available
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
+    CMD pgrep -x arecord > /dev/null || exit 1
+
+USER audiodrop
+
 ENTRYPOINT ["/app/entrypoint.sh"]
