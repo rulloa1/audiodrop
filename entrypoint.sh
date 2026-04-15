@@ -131,8 +131,8 @@ while true; do
     if wait "${ARECORD_PID}"; then
         remove_if_empty "${RECORDING_FILE}"
         if [ -f "${RECORDING_FILE}" ]; then
-            local_size=$(stat -c%s "${RECORDING_FILE}" 2>/dev/null || echo "?")
-            log "[segment ${SEGMENT}] Saved ${RECORDING_FILE} (${local_size} bytes)"
+            file_size=$(stat -c%s "${RECORDING_FILE}" 2>/dev/null || echo "?")
+            log "[segment ${SEGMENT}] Saved ${RECORDING_FILE} (${file_size} bytes)"
         fi
     else
         remove_if_empty "${RECORDING_FILE}"

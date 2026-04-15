@@ -51,7 +51,7 @@ The following environment variables can be used to configure the recorder:
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `AUDIO_CHANNELS` | `1` | Number of audio channels (1–8) |
-| `AUDIO_RATE` | `44100` | Sample rate in Hz (8 000–192 000) |
+| `AUDIO_RATE` | `44100` | Sample rate in Hz (8000–192000) |
 | `RECORD_DURATION` | `60` | Duration of each recording segment in seconds |
 | `OUTPUT_DIR` | `/recordings` | Directory where recordings are saved |
 | `AUDIO_DEVICE` | `default` | ALSA device name (e.g. `hw:0,0`) |
