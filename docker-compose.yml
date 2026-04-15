@@ -13,7 +13,12 @@ services:
     group_add:
       - audio
 
-    # Environment configuration
+    # Load overrides from .env (copy .env.example → .env to customise)
+    env_file:
+      - path: .env
+        required: false
+
+    # Default environment configuration (overridden by .env if present)
     environment:
       - AUDIO_CHANNELS=1
       - AUDIO_RATE=44100

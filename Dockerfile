@@ -7,6 +7,7 @@ LABEL description="Audio recording container with automatic audio capture"
 RUN apt-get update && apt-get install -y --no-install-recommends \
     alsa-utils \
     pulseaudio-utils \
+    procps \
     && rm -rf /var/lib/apt/lists/* \
     && groupadd --gid 1000 audiodrop \
     && useradd --uid 1000 --gid audiodrop --shell /bin/bash --create-home audiodrop \
@@ -29,8 +30,8 @@ ENV AUDIO_CHANNELS=1 \
 # Volume for recordings
 VOLUME ["/recordings"]
 
-# Healthcheck: verify arecord binary is available
-HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
+# Healthcheck: verify arecord is actively running
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
     CMD pgrep -x arecord > /dev/null || exit 1
 
 USER audiodrop

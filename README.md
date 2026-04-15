@@ -19,6 +19,9 @@ A Docker-based audio recording tool that automatically captures audio from the s
 ### Using Docker Compose (Recommended)
 
 ```bash
+# Copy and edit configuration (optional)
+cp .env.example .env
+
 # Build and start the container
 docker compose up -d
 
@@ -27,6 +30,16 @@ docker compose logs -f
 
 # Stop recording
 docker compose down
+```
+
+### Using the Makefile
+
+```bash
+make build        # Build image
+make run          # Start recording (creates ./recordings/)
+make logs         # Follow live output
+make list-devices # Show available ALSA capture devices
+make stop         # Stop container
 ```
 
 ### Using Docker Directly
@@ -54,7 +67,7 @@ The following environment variables can be used to configure the recorder:
 | `AUDIO_RATE` | `44100` | Sample rate in Hz (8000–192000) |
 | `RECORD_DURATION` | `60` | Duration of each recording segment in seconds |
 | `OUTPUT_DIR` | `/recordings` | Directory where recordings are saved |
-| `AUDIO_DEVICE` | `default` | ALSA device name (e.g. `hw:0,0`) |
+| `AUDIO_DEVICE` | `default` | ALSA device name (`default`, `hw:0,0`, or `list` to enumerate) |
 | `AUDIO_FORMAT` | `S16_LE` | Sample format (`S16_LE`, `S24_LE`, `S32_LE`) |
 | `MIN_DISK_MB` | `100` | Minimum free disk space (MB) before pausing |
 
