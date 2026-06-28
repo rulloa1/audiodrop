@@ -1,0 +1,16 @@
+# Recordings output
+recordings/
+
+# Local environment overrides (copy .env.example → .env)
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/

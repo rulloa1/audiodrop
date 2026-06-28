@@ -1,0 +1,53 @@
+services:
+  audiodrop:
+    build: .
+    image: audiodrop:latest
+    container_name: audiodrop
+    restart: unless-stopped
+
+    # Audio device access
+    devices:
+      - /dev/snd:/dev/snd
+
+    # Group access for audio (alternative to privileged mode)
+    group_add:
+      - audio
+
+    # Load overrides from .env (copy .env.example → .env to customise)
+    env_file:
+      - path: .env
+        required: false
+
+    # Default environment configuration (overridden by .env if present)
+    environment:
+      - AUDIO_CHANNELS=1
+      - AUDIO_RATE=44100
+      - RECORD_DURATION=60
+      - OUTPUT_DIR=/recordings
+      - AUDIO_DEVICE=default
+      - AUDIO_FORMAT=S16_LE
+      - MIN_DISK_MB=100
+
+    # Mount recordings directory
+    volumes:
+      - ./recordings:/recordings
+
+    # Container resource limits
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: "0.50"
+
+    # Logging
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+    # For PulseAudio support, uncomment the lines below:
+    # volumes:
+    #   - /run/user/1000/pulse:/run/user/1000/pulse
+    # environment:
+    #   - PULSE_SERVER=unix:/run/user/1000/pulse/native
