@@ -55,6 +55,14 @@ validate_config() {
         valid=false
     fi
 
+    case "${FORMAT}" in
+        S16_LE|S24_LE|S32_LE) ;;
+        *)
+            err "AUDIO_FORMAT must be S16_LE, S24_LE, or S32_LE (got '${FORMAT}')"
+            valid=false
+            ;;
+    esac
+
     if ! [[ "${DURATION}" =~ ^[0-9]+$ ]] || [ "${DURATION}" -lt 1 ]; then
         err "RECORD_DURATION must be a positive integer (got '${DURATION}')"
         valid=false
